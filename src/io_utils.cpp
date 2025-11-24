@@ -27,17 +27,14 @@ namespace io_utils
             return "UNKNOWN";
         }
 
-        void log(LogLevel log_level, const char *format, ...)
+        void log(LogLevel log_level, const char *format, va_list ap)
         {
             if (log_level <= s_log_level)
             {
-                Serial.printf("[%s]", to_string(log_level));
+                Serial.printf("[%s] ", to_string(log_level));
 
-                va_list ap;
-                va_start(ap, format);
-                Serial.printf(format, ap);
+                Serial.vprintf(format, ap);
                 Serial.print('\n');
-                va_end(ap);
             }
         }
     }
