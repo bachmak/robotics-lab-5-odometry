@@ -8,10 +8,10 @@ namespace wheel_utils
 {
     Degree get_full_angle(const Wheel &wheel, const Degree prev_full_angle)
     {
-        const auto prev_angle = Degree{fmod(prev_full_angle.v, 360.0)};
+        const auto prev_angle = Degree{fmod(prev_full_angle.v, 360.0f)};
         const auto curr_angle = wheel.read_angle();
 
-        const auto prev_turns = static_cast<int>(prev_full_angle.v / 360.0);
+        const auto prev_turns = static_cast<int>(prev_full_angle.v / 360.0f);
         const auto curr_turns = [&]
         {
             constexpr auto min = Degree{90};

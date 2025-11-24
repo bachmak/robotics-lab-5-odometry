@@ -21,7 +21,7 @@ void Robot::move(const Meter target_pos, const Meter init_pos)
 
     auto cur_pos = init_pos;
 
-    while (fabs((cur_pos - target_pos).v) > eps)
+    while (abs(cur_pos - target_pos) > Meter{0.01})
     {
         // TODO: complete implementation
         delay(2000);

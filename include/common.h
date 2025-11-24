@@ -1,8 +1,7 @@
 #pragma once
 
 #include <chrono>
-
-constexpr auto eps = 0.00001f;
+#include <cmath>
 
 template <typename T, typename Tag>
 struct StrongType
@@ -30,6 +29,8 @@ struct StrongType
     Self &operator*=(Self b) { return (v *= b.v, *this); }
     Self &operator/=(Self b) { return (v /= b.v, *this); }
     Self &operator%=(Self b) { return (v %= b.v, *this); }
+
+    friend Self abs(Self a) { return std::abs(a.v); }
 };
 
 using Us = std::chrono::microseconds;
