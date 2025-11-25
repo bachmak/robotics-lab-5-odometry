@@ -1,10 +1,8 @@
-#include "wheel_utils.h"
-
-#include "wheel.h"
+#include "geo_utils.h"
 
 #include <math.h>
 
-namespace wheel_utils
+namespace geo_utils
 {
     namespace
     {
@@ -19,10 +17,10 @@ namespace wheel_utils
         }
     }
 
-    Degree get_full_angle(const Wheel &wheel, const Degree prev_full_angle)
+    Degree get_full_angle(const Degree full_angle, const Degree prev_full_angle)
     {
         const auto prev_angle = normalize(prev_full_angle);
-        const auto curr_angle = normalize(wheel.read_angle());
+        const auto curr_angle = normalize(full_angle);
 
         const auto prev_turns = static_cast<int>(floor(prev_full_angle.v / 360.0f));
         const auto curr_turns = [&]
@@ -43,29 +41,13 @@ namespace wheel_utils
         return curr_full_angle;
     }
 
-    Meter to_distance(const Wheel &wheel, Degree angle)
+    Meter to_distance(Degree angle, Meter circumference)
     {
-        return Meter{angle.v / 360 * wheel.circumference().v};
+        return Meter{angle.v / 360 * circumference.v};
     }
 
-    Degree to_angle(const Wheel &wheel, Meter distance)
+    Degree to_angle(Meter distance, Meter circumference)
     {
-        return Degree{distance.v / wheel.circumference().v * 360};
-    }
-
-    void stop(Wheel &wheel, WheelAttachment &wa)
-    {
-        wheel.rotate(wa, Speed{0});
-    }
-
-    void rotate(Wheel &wheel, WheelAttachment &wa, Speed speed)
-    {
-        wheel.rotate(wa, speed);
-    }
-
-    void change_speed(Wheel &wheel, WheelAttachment &wa, Speed delta_speed)
-    {
-        auto speed = wheel.current_speed() + delta_speed;
-        wheel.rotate(wa, speed);
+        return Degree{distance.v / circumference.v * 360};
     }
 }

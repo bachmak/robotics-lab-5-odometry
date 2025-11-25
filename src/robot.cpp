@@ -55,8 +55,8 @@ void Robot::rotate(Degree target_pos, Degree init_pos)
 
 void Robot::rotate(Meter left, Meter right, Speed speed)
 {
-    auto left_deg = wheel_utils::to_angle(wheels_.left, left);
-    auto right_deg = wheel_utils::to_angle(wheels_.right, right);
+    auto left_deg = geo_utils::to_angle(left, wheels_.left.circumference());
+    auto right_deg = geo_utils::to_angle(right, wheels_.right.circumference());
     rotate(left_deg, right_deg, speed);
 }
 
@@ -134,8 +134,8 @@ void Robot::rotate(Degree distance_left, Degree distance_right, Speed speed)
         w_left.rotate(wa_left, speed_left);
         w_right.rotate(wa_right, speed_right);
 
-        const auto new_angle_left = wheel_utils::get_full_angle(w_left, angle_left);
-        const auto new_angle_right = wheel_utils::get_full_angle(w_right, angle_right);
+        const auto new_angle_left = geo_utils::get_full_angle(w_left.read_angle(), angle_left);
+        const auto new_angle_right = geo_utils::get_full_angle(w_right.read_angle(), angle_right);
 
         const auto loop_time = loop_clock.tick();
 
@@ -165,8 +165,8 @@ void Robot::rotate(Degree distance_left, Degree distance_right, Speed speed)
 
     delay(settings_.wait_after_move.count());
 
-    angle_left = wheel_utils::get_full_angle(w_left, angle_left);
-    angle_right = wheel_utils::get_full_angle(w_right, angle_right);
+    angle_left = geo_utils::get_full_angle(w_left.read_angle(), angle_left);
+    angle_right = geo_utils::get_full_angle(w_right.read_angle(), angle_right);
 
     io_utils::info(
         "Rotation done. Total time = %d s, Average control loop time = %d ms\n"
@@ -175,11 +175,11 @@ void Robot::rotate(Degree distance_left, Degree distance_right, Speed speed)
         static_cast<int>(std::chrono::duration_cast<Sec>(clock.time_passed()).count()),
         static_cast<int>(loop_clock.average().count()),
 
-        distance_left.v, wheel_utils::to_distance(w_left, distance_left).v, target_left.v, angle_left.v,
-        (angle_left - target_left).v, wheel_utils::to_distance(w_left, angle_left - target_left).v,
+        distance_left.v, geo_utils::to_distance(distance_left, w_left.circumference()).v, target_left.v, angle_left.v,
+        (angle_left - target_left).v, geo_utils::to_distance(angle_left - target_left, w_left.circumference()).v,
         abs((angle_left - target_left) / distance_left).v * 100,
 
-        distance_right.v, wheel_utils::to_distance(w_right, distance_right).v, target_right.v, angle_right.v,
-        (angle_right - target_right).v, wheel_utils::to_distance(w_right, angle_right - target_right).v,
+        distance_right.v, geo_utils::to_distance(distance_right, w_right.circumference()).v, target_right.v, angle_right.v,
+        (angle_right - target_right).v, geo_utils::to_distance(angle_right - target_right, w_right.circumference()).v,
         abs((angle_right - target_right) / distance_right).v * 100);
 }
