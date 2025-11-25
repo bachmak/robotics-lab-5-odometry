@@ -2,8 +2,18 @@
 
 #include "wheel.h"
 
+struct RobotSettings
+{
+    WheelSettings left_wheel_settings;
+    WheelSettings right_wheel_settings;
+};
+
 struct Wheels
 {
+    Wheels(WheelSettings &&left_settings, WheelSettings &&right_settings)
+        : left(std::move(left_settings)),
+          right(std::move(right_settings)) {}
+
     Wheel left;
     Wheel right;
 };
@@ -11,7 +21,7 @@ struct Wheels
 class Robot
 {
 public:
-    Robot(const Wheels &wheels) : wheels_(wheels) {}
+    explicit Robot(const RobotSettings &settings);
 
 public:
     void move(Meter target_pos, Meter cur_pos);

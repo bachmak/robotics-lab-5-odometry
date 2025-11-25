@@ -42,6 +42,26 @@ struct ActionInfo
   float default_param_value = 0.0;
 };
 
+WheelSettings left_wheel_settings()
+{
+  auto settings = WheelSettings{};
+  settings.control_pin = Pin{5};
+  settings.feedback_pin = Pin{6};
+  settings.speed_dead_range = Speed{5};
+  settings.label = "left-wheel";
+  return settings;
+}
+
+WheelSettings right_wheel_settings()
+{
+  auto settings = WheelSettings{};
+  settings.control_pin = Pin{7};
+  settings.feedback_pin = Pin{8};
+  settings.speed_dead_range = Speed{5};
+  settings.label = "right-wheel";
+  return settings;
+}
+
 struct Config
 {
   int serial_baud = 9600;
@@ -53,6 +73,11 @@ struct Config
       {"l", {Action::TURN_LEFT, 90.0}},
       {"r", {Action::TURN_RIGHT, 90.0}},
   };
+
+  RobotSettings robot_settings = {
+      left_wheel_settings(),
+      right_wheel_settings(),
+  };
 };
 
 ActionInfo str_to_action_info(const std::string &action_name, const Config &config)
@@ -63,31 +88,6 @@ ActionInfo str_to_action_info(const std::string &action_name, const Config &conf
   }
 
   return {};
-}
-
-Wheels create_wheels()
-{
-  auto left_wheel = []
-  {
-    auto settings = WheelSettings{};
-    settings.control_pin = Pin{7};
-    settings.feedback_pin = Pin{8};
-    settings.speed_dead_range = Speed{1};
-    settings.label = "left-wheel";
-    return Wheel(settings);
-  }();
-
-  auto right_wheel = []
-  {
-    auto settings = WheelSettings{};
-    settings.control_pin = Pin{5};
-    settings.feedback_pin = Pin{6};
-    settings.speed_dead_range = Speed{1};
-    settings.label = "right-wheel";
-    return Wheel(settings);
-  }();
-
-  return Wheels{left_wheel, right_wheel};
 }
 
 void do_loop(Robot &robot, const Config &config)
@@ -131,8 +131,7 @@ void setup()
 void loop()
 {
   auto config = Config{};
-  auto wheels = create_wheels();
-  auto robot = Robot(wheels);
+  auto robot = Robot(config.robot_settings);
 
   io_utils::init(config.serial_baud, config.log_level);
   io_utils::debug("Initialization complete");

@@ -5,6 +5,9 @@
 
 #include <Arduino.h>
 
+Robot::Robot(const RobotSettings &settings)
+    : wheels_(settings.left_wheel_settings, settings.right_wheel_settings) {}
+
 void Robot::move(const Meter target_pos, const Meter init_pos)
 {
     const auto direction = Speed{init_pos < target_pos ? 1 : -1};

@@ -13,7 +13,7 @@ struct WheelSettings
     Pin feedback_pin{0};
 
     Pwm min_pwm{40};
-    Pwm stop_pwm{90};
+    Pwm stop_pwm{94};
     Pwm max_pwm{150};
 
     Speed speed_dead_range{5};
@@ -41,16 +41,21 @@ public:
 private:
     friend class Wheel;
     Servo &servo;
+    Pin pin;
 };
 
 class Wheel
 {
 public:
-    explicit Wheel(const WheelSettings &settings);
+    explicit Wheel(WheelSettings &&settings);
+
+    Wheel(const Wheel &) = delete;
+    Wheel &operator=(const Wheel &) = delete;
 
 public:
     Meter circumference() const { return settings_.circumference; }
     Speed current_speed() const { return current_speed_; }
+    Servo &servo() { return servo_; }
 
     WheelAttachment attach() { return WheelAttachment(servo_, settings_.control_pin); }
 

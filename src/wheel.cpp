@@ -10,8 +10,8 @@ WheelAttachment::WheelAttachment(Servo &servo, Pin pin) : servo(servo) { servo.a
 
 WheelAttachment::~WheelAttachment() { servo.detach(); }
 
-Wheel::Wheel(const WheelSettings &settings)
-    : settings_(settings), current_speed_(0)
+Wheel::Wheel(WheelSettings &&settings)
+    : settings_(std::move(settings)), current_speed_(0)
 {
     pinMode(settings_.feedback_pin.v, INPUT);
 
