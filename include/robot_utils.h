@@ -1,26 +1,29 @@
 #pragma once
 
 #include "common.h"
+#include "geo_utils.h"
 
 namespace robot_utils
 {
     inline void move_fwd(Robot &robot, Meter distance)
     {
-        robot.move(distance, Meter{0});
+        robot.rotate(distance, distance, Speed{1});
     }
 
     inline void move_bwd(Robot &robot, Meter distance)
     {
-        robot.move(Meter{0}, distance);
+        robot.rotate(-distance, -distance, Speed{1});
     }
 
     inline void rotate_left(Robot &robot, Degree angle)
     {
-        robot.rotate(angle, Degree{0});
+        auto sector_length = geo_utils::to_sector(angle, robot.width() / 2);
+        robot.rotate(-sector_length, sector_length, Speed{1});
     }
 
     inline void rotate_right(Robot &robot, Degree angle)
     {
-        robot.rotate(Degree{0}, angle);
+        auto sector_length = geo_utils::to_sector(angle, robot.width() / 2);
+        robot.rotate(sector_length, -sector_length, Speed{1});
     }
 }

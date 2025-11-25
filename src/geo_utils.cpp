@@ -15,6 +15,8 @@ namespace geo_utils
             }
             return Degree{v};
         }
+
+        constexpr auto pi = M_PI;
     }
 
     Degree get_full_angle(const Degree full_angle, const Degree prev_full_angle)
@@ -49,5 +51,10 @@ namespace geo_utils
     Degree to_angle(Meter distance, Meter circumference)
     {
         return Degree{distance.v / circumference.v * 360};
+    }
+
+    Meter to_sector(Degree angle, Meter radius)
+    {
+        return Meter{angle.v * pi * radius.v / 180.0f};
     }
 }

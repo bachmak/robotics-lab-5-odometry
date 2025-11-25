@@ -15,6 +15,7 @@ enum class Action
   GO_BACKWARD,
   TURN_LEFT,
   TURN_RIGHT,
+  CUSTOM,
 };
 
 const char *to_string(Action action)
@@ -31,6 +32,8 @@ const char *to_string(Action action)
     return "TURN_LEFT";
   case Action::TURN_RIGHT:
     return "TURN_RIGHT";
+  case Action::CUSTOM:
+    return "CUSTOM";
   }
 
   return "";
@@ -45,13 +48,14 @@ struct ActionInfo
 struct Config
 {
   int serial_baud = 9600;
-  io_utils::LogLevel log_level = io_utils::LogLevel::DEBUG;
+  io_utils::LogLevel log_level = io_utils::LogLevel::INFO;
 
   std::unordered_map<std::string, ActionInfo> actions = {
       {"f", {Action::GO_FORWARD, 0.1}},
       {"b", {Action::GO_BACKWARD, 0.1}},
       {"l", {Action::TURN_LEFT, 90.0}},
       {"r", {Action::TURN_RIGHT, 90.0}},
+      {"c", {Action::CUSTOM}},
   };
 
   RobotSettings robot_settings = {
@@ -107,6 +111,9 @@ void do_loop(Robot &robot, const Config &config)
     break;
   case Action::TURN_RIGHT:
     robot_utils::rotate_right(robot, Degree{param});
+    break;
+  case Action::CUSTOM:
+    robot.rotate(Degree{-200}, Degree{200}, Speed{1});
     break;
   }
 }

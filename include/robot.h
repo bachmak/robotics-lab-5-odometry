@@ -10,6 +10,7 @@ struct RobotSettings
     float p_controller_gain = 50.0f;
     float speed_ema_filter_coef = 0.1f;
     Ms wait_after_move{100};
+    Meter width{0.1};
     Degree inertial_stop_angle{5};
 };
 
@@ -28,8 +29,7 @@ public:
     explicit Robot(const RobotSettings &settings);
 
 public:
-    void move(Meter target_pos, Meter cur_pos);
-    void rotate(Degree target_pos, Degree cur_pos);
+    Meter width() const { return settings_.width; }
 
     void rotate(Meter left, Meter right, Speed speed);
     void rotate(Degree left, Degree right, Speed speed);
