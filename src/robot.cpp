@@ -77,13 +77,13 @@ void Robot::rotate(Degree distance_left, Degree distance_right, Speed speed)
 
     io_utils::debug("cur_left=%f, cur_right=%f", cur_left.v, cur_right.v);
 
-    auto target_left = cur_left + distance_left;
-    auto target_right = cur_right - distance_right;
+    const auto target_left = cur_left + distance_left;
+    const auto target_right = cur_right - distance_right;
 
     io_utils::debug("target_left=%f, target_right=%f", target_left.v, target_right.v);
 
-    auto dir_left = Speed{distance_left > Degree{0} ? 1 : -1};
-    auto dir_right = Speed{distance_right > Degree{0} ? 1 : -1};
+    const auto dir_left = Speed{distance_left > Degree{0} ? 1 : -1};
+    const auto dir_right = Speed{distance_right > Degree{0} ? 1 : -1};
 
     io_utils::debug("dir_left=%d, dir_right=%d", dir_left.v, dir_right.v);
 
