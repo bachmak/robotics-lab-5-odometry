@@ -87,7 +87,7 @@ ActionInfo str_to_action_info(const std::string &action_name, const Config &conf
 
 void do_loop(Robot &robot, const Config &config)
 {
-  const auto action_str = io_utils::get_string();
+  const auto action_str = common_utils::trim(io_utils::get_string());
   const auto action_info = str_to_action_info(action_str, config);
 
   const auto param_str = io_utils::try_get_string();

@@ -1,7 +1,26 @@
 #include "common_utils.h"
 
+#include <algorithm>
+
 namespace common_utils
 {
+    std::string trim(const std::string &str)
+    {
+        auto start = std::find_if(str.begin(), str.end(), [](auto ch)
+                                  { return !std::isspace(ch); });
+
+        if (start == str.end())
+        {
+            return "";
+        }
+
+        auto end = std::find_if(str.rbegin(), str.rend(), [](auto ch)
+                                { return !std::isspace(ch); })
+                       .base();
+
+        return std::string(start, end);
+    }
+
     std::optional<float> str_to_float(const std::string &str)
     {
         char *end = nullptr;
