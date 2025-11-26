@@ -165,11 +165,11 @@ struct ActionType
 
             robot_utils::rotate_left(robot, Degree{45}, base.speed);
             robot_utils::move_fwd(robot, diag, base.speed);
-            robot_utils::rotate_right(robot, Degree{45}, base.speed);
+            robot_utils::rotate_right(robot, Degree{135}, base.speed);
             robot_utils::move_fwd(robot, side, base.speed);
-            robot_utils::rotate_right(robot, Degree{45}, base.speed);
+            robot_utils::rotate_right(robot, Degree{135}, base.speed);
             robot_utils::move_fwd(robot, diag, base.speed);
-            robot_utils::rotate_left(robot, Degree{45}, base.speed);
+            robot_utils::rotate_left(robot, Degree{135}, base.speed);
             robot_utils::move_fwd(robot, side, base.speed);
             robot_utils::rotate_left(robot, Degree{90}, base.speed);
         }
