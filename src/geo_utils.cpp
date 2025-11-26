@@ -50,7 +50,7 @@ namespace geo_utils
 
     Degree to_angle(Meter distance, Meter circumference)
     {
-        return Degree{distance / circumference * 360};
+        return Degree{(distance / circumference * 360).v};
     }
 
     Meter to_sector(Degree angle, Meter radius)
