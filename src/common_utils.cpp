@@ -65,6 +65,31 @@ namespace common_utils
         return result;
     }
 
+    float str_to_float(const std::string &str, float default_value)
+    {
+        return str_to_float(str).value_or(default_value);
+    }
+
+    std::optional<bool> str_to_bool(const std::string &str)
+    {
+        if (str == "true" || str == "1")
+        {
+            return true;
+        }
+
+        if (str == "false" || str == "0")
+        {
+            return false;
+        }
+
+        return std::nullopt;
+    }
+
+    bool str_to_bool(const std::string &str, bool default_value)
+    {
+        return str_to_bool(str).value_or(default_value);
+    }
+
     float str_to_float(const std::optional<std::string> &str, float default_value)
     {
         if (str.has_value())
