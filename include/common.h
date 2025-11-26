@@ -19,17 +19,41 @@ struct StrongType
     friend Self operator%(Self a, Self b) { return Self{a.v % b.v}; }
     friend Self operator-(Self a) { return Self{-a.v}; }
 
+    friend Self operator+(Self a, T b) { return Self{a.v + b}; }
+    friend Self operator-(Self a, T b) { return Self{a.v - b}; }
+    friend Self operator*(Self a, T b) { return Self{a.v * b}; }
+    friend Self operator/(Self a, T b) { return Self{a.v / b}; }
+    friend Self operator%(Self a, T b) { return Self{a.v % b}; }
+
+    friend Self operator+(T a, Self b) { return Self{a + b.v}; }
+    friend Self operator-(T a, Self b) { return Self{a - b.v}; }
+    friend Self operator*(T a, Self b) { return Self{a * b.v}; }
+    friend Self operator/(T a, Self b) { return Self{a / b.v}; }
+    friend Self operator%(T a, Self b) { return Self{a % b.v}; }
+
     friend bool operator<(Self a, Self b) { return a.v < b.v; }
     friend bool operator>(Self a, Self b) { return a.v > b.v; }
     friend bool operator==(Self a, Self b) { return a.v == b.v; }
     friend bool operator<=(Self a, Self b) { return a.v <= b.v; }
     friend bool operator>=(Self a, Self b) { return a.v >= b.v; }
 
+    friend bool operator<(Self a, T b) { return a.v < b; }
+    friend bool operator>(Self a, T b) { return a.v > b; }
+    friend bool operator==(Self a, T b) { return a.v == b; }
+    friend bool operator<=(Self a, T b) { return a.v <= b; }
+    friend bool operator>=(Self a, T b) { return a.v >= b; }
+
     Self &operator+=(Self b) { return (v += b.v, *this); }
     Self &operator-=(Self b) { return (v -= b.v, *this); }
     Self &operator*=(Self b) { return (v *= b.v, *this); }
     Self &operator/=(Self b) { return (v /= b.v, *this); }
     Self &operator%=(Self b) { return (v %= b.v, *this); }
+
+    Self &operator+=(T b) { return (v += b, *this); }
+    Self &operator-=(T b) { return (v -= b, *this); }
+    Self &operator*=(T b) { return (v *= b, *this); }
+    Self &operator/=(T b) { return (v /= b, *this); }
+    Self &operator%=(T b) { return (v %= b, *this); }
 
     friend Self abs(Self a) { return Self{std::abs(a.v)}; }
 };
