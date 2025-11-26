@@ -48,6 +48,7 @@ struct ActionInfo
 struct Config
 {
   int serial_baud = 9600;
+  Ms delay_after_io_init{2000};
   io_utils::LogLevel log_level = io_utils::LogLevel::INFO;
 
   std::unordered_map<std::string, ActionInfo> actions = {
@@ -62,11 +63,13 @@ struct Config
       .left_wheel_settings = {
           .control_pin = Pin{5},
           .feedback_pin = Pin{6},
+          .speed_dead_range = Speed{4},
           .label = "right-wheel",
       },
       .right_wheel_settings = {
           .control_pin = Pin{7},
           .feedback_pin = Pin{8},
+          .speed_dead_range = Speed{4},
           .label = "left-wheel",
       },
   };
@@ -129,6 +132,7 @@ void loop()
   auto robot = Robot(config.robot_settings);
 
   io_utils::init(config.serial_baud, config.log_level);
+  delay(config.delay_after_io_init.count());
   io_utils::debug("Initialization complete");
 
   while (true)
