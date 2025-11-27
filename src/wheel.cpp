@@ -45,7 +45,16 @@ void Wheel::rotate(WheelAttachment &wa, Speed speed)
         return Pwm{adjusted_speed.v};
     }();
 
-    const auto pwm = settings_.stop_pwm + delta_pwm;
+    auto pwm = settings_.stop_pwm + delta_pwm;
+
+    if (settings_.label == "left-wheel")
+    {
+        if (pwm > settings_.stop_pwm)
+        {
+            pwm -= 1;
+        }
+        io_utils::debug("Left-wheel: %d", pwm.v);
+    }
 
     if (pwm < settings_.min_pwm || pwm > settings_.max_pwm)
     {
