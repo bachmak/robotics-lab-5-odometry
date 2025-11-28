@@ -83,6 +83,7 @@ void do_loop(Robot &robot, const Config &config)
              { action.apply(robot); }, action);
 }
 
+#if defined(TODO_UNCOMMENT)
 void setup()
 {
   // inital setup in loop, to avoid using global state
@@ -102,3 +103,4 @@ void loop()
     do_loop(robot, config);
   }
 }
+#endif
