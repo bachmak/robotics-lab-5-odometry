@@ -4,6 +4,7 @@
 
 #include <rcl/node.h>
 #include <rcl/publisher.h>
+#include <rcl/subscription.h>
 
 namespace ros
 {
@@ -18,8 +19,12 @@ namespace ros
         void init(rcl_publisher_t &publisher,
                   const char *topic_name,
                   const rosidl_message_type_support_t *type_support);
+        void init(rcl_subscription_t &subscription,
+                  const char *topic_name,
+                  const rosidl_message_type_support_t *type_support);
 
         void finalize(rcl_publisher_t &publisher);
+        void finalize(rcl_subscription_t &subscription);
 
     private:
         rcl_node_t impl_;

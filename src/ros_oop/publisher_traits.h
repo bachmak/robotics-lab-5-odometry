@@ -28,6 +28,11 @@ namespace ros
         {
             return RclMessageType{.data = data};
         }
+
+        static auto to_original_type(const RclMessageType *msg)
+        {
+            return int32_t{msg->data};
+        }
     };
 
     template <>

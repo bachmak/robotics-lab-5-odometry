@@ -1,6 +1,7 @@
 #include "ros_oop/executor.h"
 
 #include "ros_oop/timer.h"
+#include "ros_oop/subscription.h"
 #include "common_utils.h"
 #include "ros_oop/support.h"
 #include "utils/rcl.h"
@@ -22,6 +23,24 @@ namespace ros
                     [this](Timer *timer)
                     {
                         rcc_check(rclc_executor_add_timer(&impl_, &timer->impl()));
+                    },
+                    [this](SubscriptionBase *subscription)
+                    {
+                        auto callback = [](const void *msg, void *context)
+                        {
+                            auto *subscription = static_cast<SubscriptionBase *>(context);
+                            subscription->on_message(msg);
+                        };
+
+                        auto context = static_cast<void *>(subscription);
+
+                        rcc_check(rclc_executor_add_subscription_with_context(
+                            &impl_,
+                            &subscription->impl(),
+                            subscription->msg(),
+                            callback,
+                            context,
+                            ON_NEW_DATA));
                     }},
                 executable);
         }
@@ -34,6 +53,10 @@ namespace ros
             std::visit(overloads{[this](Timer *timer)
                                  {
                                      rcc_check(rclc_executor_remove_timer(&impl_, &timer->impl()));
+                                 },
+                                 [this](SubscriptionBase *subscription)
+                                 {
+                                     rcc_check(rclc_executor_remove_subscription(&impl_, &subscription->impl()));
                                  }},
                        executable);
         }

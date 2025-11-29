@@ -12,8 +12,9 @@ namespace ros
 {
     class Support;
     class Timer;
+    class SubscriptionBase;
 
-    using Executable = std::variant<Timer *>;
+    using Executable = std::variant<Timer *, SubscriptionBase *>;
 
     class Executor
     {
