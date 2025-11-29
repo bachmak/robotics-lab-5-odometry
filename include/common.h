@@ -58,6 +58,7 @@ struct StrongType
     friend Self abs(Self a) { return Self{std::abs(a.v)}; }
 };
 
+using Ns = std::chrono::nanoseconds;
 using Us = std::chrono::microseconds;
 using Ms = std::chrono::milliseconds;
 using Sec = std::chrono::seconds;
