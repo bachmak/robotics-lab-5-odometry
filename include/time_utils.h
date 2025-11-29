@@ -7,13 +7,40 @@ namespace time_utils
     class StopWatch
     {
     public:
+        explicit StopWatch(Ms start = Ms{millis()}) : start(start) {}
+
         Ms time_passed(Ms curr = Ms{millis()}) const
         {
             return curr - start;
         }
 
+        void reset(Ms curr = Ms{millis()})
+        {
+            start = curr;
+        }
+
     private:
-        Ms start = Ms{millis()};
+        Ms start;
+    };
+
+    class Timer
+    {
+    public:
+        explicit Timer(Ms duration, Ms start = Ms{millis()}) : duration(duration), stop_watch(start) {}
+
+        bool is_over(Ms curr = Ms{millis()}) const
+        {
+            return stop_watch.time_passed(curr) > duration;
+        }
+
+        void reset(Ms curr = Ms{millis()})
+        {
+            stop_watch.reset(curr);
+        }
+
+    private:
+        Ms duration;
+        StopWatch stop_watch;
     };
 
     class LoopStopWatch
