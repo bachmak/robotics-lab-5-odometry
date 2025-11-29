@@ -13,8 +13,9 @@ namespace ros
     class Support
     {
     public:
-        static Support &get_instance();
         NON_COPYABLE(Support)
+        Support();
+        ~Support();
 
         void init(rcl_node_t &node, const char *name);
         void init(rcl_timer_t &timer,
@@ -26,9 +27,6 @@ namespace ros
         void finalize(rclc_executor_t &executor);
 
     private:
-        Support();
-        ~Support();
-
         rclc_support_t impl_;
         rcl_allocator_t allocator_;
     };

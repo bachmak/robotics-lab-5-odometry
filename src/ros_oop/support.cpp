@@ -9,13 +9,6 @@
 
 namespace ros
 {
-
-    Support &Support::get_instance()
-    {
-        static auto instance = Support{};
-        return instance;
-    }
-
     Support::Support() : allocator_(rcl_get_default_allocator())
     {
         rcc_check(rclc_support_init(&impl_, 0, nullptr, &allocator_));
