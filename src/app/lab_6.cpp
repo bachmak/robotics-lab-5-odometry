@@ -2,7 +2,7 @@
 
 #include "ros_oop/support.h"
 #include "ros_oop/node.h"
-#include "ros_oop/publisher.h"
+#include "ros_oop/subscription.h"
 #include "ros_oop/executor.h"
 #include "ros_oop/timer.h"
 #include "io_utils.h"
@@ -31,6 +31,8 @@ namespace lab_6
         Ms loop_delay{100};
         Ms spin_timeout{100};
         Ms connection_check_period{500};
+
+        Pin blink_pin{13};
     };
 
     static const auto config = Config{};
@@ -48,17 +50,18 @@ namespace lab_6
 
         auto support = ros::Support{};
         auto node = ros::Node{support, config.node_name};
-        auto publisher = ros::Publisher<int32_t>{node, config.topic_name};
-        auto timer_callback = [&](int64_t last_call_time)
+        auto subscription_callback = [&config](int32_t data)
         {
-            static auto counter = 0;
-            publisher.publish(counter++);
+            digitalWrite(config.blink_pin.v, data);
         };
 
-        auto timer = ros::Timer{support, config.timer_period, timer_callback};
+        auto subscription = ros::Subscription<int32_t>{
+            node,
+            "micro_ros_arduino_subscriber",
+            subscription_callback};
 
         auto executables = std::vector<ros::Executable>{
-            &timer,
+            &subscription.base(),
         };
 
         auto executor = ros::Executor{support, executables};
@@ -75,6 +78,8 @@ namespace lab_6
         const auto config = Config{};
 
         io_utils::init(config.io_setings);
+
+        pinMode(config.blink_pin.v, OUTPUT);
 
         while (true)
         {

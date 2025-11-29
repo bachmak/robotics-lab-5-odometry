@@ -58,6 +58,8 @@ namespace ros
         {
         }
 
+        SubscriptionBase &base() { return base_; }
+
     private:
         RclMessageType message_;
         SubscriptionBase base_;
