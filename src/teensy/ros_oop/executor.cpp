@@ -5,7 +5,6 @@
 #include "common_utils.h"
 #include "ros_oop/support.h"
 #include "utils/rcl.h"
-#include "executor.h"
 
 namespace ros
 {
