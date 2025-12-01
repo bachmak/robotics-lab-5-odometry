@@ -9,13 +9,13 @@ namespace ros
 {
 
     template <typename T>
-    struct PublisherTraits
+    struct MessageTraits
     {
-        static_assert(sizeof(T) == 0, "PublisherTraits not specialized for this type");
+        static_assert(sizeof(T) == 0, "MessageTraits not specialized for this type");
     };
 
     template <>
-    struct PublisherTraits<int32_t>
+    struct MessageTraits<int32_t>
     {
         using RclMessageType = std_msgs__msg__Int32;
 
@@ -36,7 +36,7 @@ namespace ros
     };
 
     template <>
-    struct PublisherTraits<float>
+    struct MessageTraits<float>
     {
         using RclMessageType = std_msgs__msg__Float32;
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ros_oop/node.h"
-#include "ros_oop/publisher_traits.h"
+#include "ros_oop/message_traits.h"
 #include "utils/non_copyable.h"
 #include "utils/rcl.h"
 
@@ -23,7 +23,7 @@ namespace ros
             node_.finalize(impl_);
         }
 
-        using Traits = PublisherTraits<T>;
+        using Traits = MessageTraits<T>;
 
         void publish(const T &data)
         {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ros_oop/publisher_traits.h"
+#include "ros_oop/message_traits.h"
 #include "utils/non_copyable.h"
 
 #include <rcl/subscription.h>
@@ -39,7 +39,7 @@ namespace ros
     class Subscription
     {
     public:
-        using Traits = PublisherTraits<T>;
+        using Traits = MessageTraits<T>;
         using RclMessageType = typename Traits::RclMessageType;
         using Callback = std::function<void(T)>;
 
