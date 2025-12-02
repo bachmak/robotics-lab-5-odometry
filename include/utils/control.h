@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "settings.h"
 
 namespace utils::control
 {
@@ -27,6 +28,7 @@ namespace utils::control
 
     public:
         float update(float setpoint, float measurement, float dt);
+        void set(Setting setting, float value);
 
     private:
         PIDSettings settings_;

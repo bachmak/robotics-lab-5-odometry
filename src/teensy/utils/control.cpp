@@ -50,4 +50,31 @@ namespace utils::control
 
         return std::clamp(output, settings_.out_min, settings_.out_max);
     }
+
+    void PID::set(Setting setting, float value)
+    {
+        switch (setting)
+        {
+        case Setting::PID_G:
+            settings_.G = value;
+            break;
+        case Setting::PID_T_I:
+            settings_.T_i = value;
+            break;
+        case Setting::PID_T_D:
+            settings_.T_d = value;
+            break;
+        case Setting::PID_OUT_MIN:
+            settings_.out_min = value;
+            break;
+        case Setting::PID_OUT_MAX:
+            settings_.out_max = value;
+            break;
+
+        default:
+            break;
+        }
+
+        params_ = to_params(settings_);
+    }
 }

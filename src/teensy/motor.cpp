@@ -63,18 +63,18 @@ namespace
             if (control > 0.0f)
             {
                 return {
-                    settings.stop_pwm + settings.fwd_pwm_deadband,
-                    settings.fwd_pwm_gain,
+                    settings.pwm_stop + settings.pwm_deadband_fwd,
+                    settings.pwm_gain_fwd,
                 };
             }
             return {
-                settings.stop_pwm - settings.bwd_pwm_deadband,
-                settings.bwd_pwm_gain,
+                settings.pwm_stop - settings.pwm_deadband_bwd,
+                settings.pwm_gain_bwd,
             };
         }();
 
         const auto pwm = zero_point + Us{static_cast<int64_t>(gain * control)};
-        return std::clamp(pwm, settings.min_pwm, settings.max_pwm);
+        return std::clamp(pwm, settings.pwm_min, settings.pwm_max);
     }
 }
 
@@ -115,4 +115,51 @@ void Motor::update(Us dt)
     const auto pwm = Us{control_to_pwm(control, settings_)};
 
     servo_.writeMicroseconds(pwm.count());
+}
+
+void Motor::set(Setting setting, float value)
+{
+    const auto pwm = Us{static_cast<int>(value)};
+    switch (setting)
+    {
+    case Setting::PID_G:
+    case Setting::PID_T_I:
+    case Setting::PID_T_D:
+    case Setting::PID_OUT_MIN:
+    case Setting::PID_OUT_MAX:
+        return pid_.set(setting, value);
+
+    case Setting::MOTOR_SPEED_FILTER_ALPHA:
+        settings_.speed_filter_alpha = value;
+        return;
+    case Setting::MOTOR_FB_PWM_MIN:
+        settings_.feedback_pwm_min = pwm;
+        return;
+    case Setting::MOTOR_FB_PWM_MAX:
+        settings_.feedback_pwm_max = pwm;
+        return;
+    case Setting::MOTOR_PWM_MIN:
+        settings_.pwm_min = pwm;
+        return;
+    case Setting::MOTOR_PWM_STOP:
+        settings_.pwm_stop = pwm;
+        return;
+    case Setting::MOTOR_PWM_MAX:
+        settings_.pwm_max = pwm;
+        return;
+    case Setting::MOTOR_PWM_DEADBAND_FWD:
+        settings_.pwm_deadband_fwd = pwm;
+        return;
+    case Setting::MOTOR_PWM_DEADBAND_BWD:
+        settings_.pwm_deadband_bwd = pwm;
+        return;
+    case Setting::MOTOR_PWD_GAIN_FWD:
+        settings_.pwm_gain_fwd = value;
+        return;
+    case Setting::MOTOR_PWD_GAIN_BWD:
+        settings_.pwm_gain_bwd = value;
+        return;
+    }
+
+    return;
 }

@@ -29,15 +29,15 @@ struct MotorSettings
     float feedback_pwm_duty_cycle_min = 0.029f;
     float feedback_pwm_duty_cycle_max = 0.971f;
 
-    Us min_pwm{1300};
-    Us stop_pwm{1500};
-    Us max_pwm{1700};
+    Us pwm_min{1300};
+    Us pwm_stop{1500};
+    Us pwm_max{1700};
 
-    Us fwd_pwm_deadband{30};
-    Us bwd_pwm_deadband{30};
+    Us pwm_deadband_fwd{30};
+    Us pwm_deadband_bwd{30};
 
-    float fwd_pwm_gain = 1.0f;
-    float bwd_pwm_gain = 1.0f;
+    float pwm_gain_fwd = 1.0f;
+    float pwm_gain_bwd = 1.0f;
 };
 
 class Motor
@@ -52,6 +52,8 @@ public:
     void set_target_speed(DegSec speed);
     DegSec get_real_speed() const;
     void update(Us dt);
+
+    void set(Setting setting, float value);
 
 private:
     MotorSettings settings_;
