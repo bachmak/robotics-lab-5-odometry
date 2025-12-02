@@ -69,7 +69,7 @@ namespace lab_5
             return;
         }
 
-        const auto action_name = tokens.front();
+        const auto action_name = std::string(tokens.front());
         const auto parameters = common_utils::remove_first(tokens);
 
         const auto action = [&]
@@ -80,7 +80,7 @@ namespace lab_5
             return action;
         }();
 
-        io_utils::info("Received: input: %s, action: %s", input.c_str(), to_string(action).c_str());
+        io_utils::info("Received: input: %s, action: %s", input.data(), to_string(action).c_str());
 
         std::visit([&](const auto &action)
                    { action.apply(robot); }, action);

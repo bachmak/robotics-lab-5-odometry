@@ -6,7 +6,7 @@
 #include <vector>
 #include <variant>
 
-using Args = std::vector<std::string>;
+using Args = std::vector<std::string_view>;
 
 struct ActionType
 {

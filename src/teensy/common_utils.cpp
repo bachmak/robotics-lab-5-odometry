@@ -4,7 +4,7 @@
 
 namespace common_utils
 {
-    std::string trim(const std::string &str)
+    std::string_view trim(const std::string_view &str)
     {
         auto start = std::find_if(str.begin(), str.end(), [](auto ch)
                                   { return !std::isspace(ch); });
@@ -18,13 +18,13 @@ namespace common_utils
                                 { return !std::isspace(ch); })
                        .base();
 
-        return std::string(start, end);
+        return std::string_view(start, end - start);
     }
 
-    std::vector<std::string> split(const std::string &s)
+    std::vector<std::string_view> split(std::string_view s)
     {
         constexpr auto delim = ' ';
-        auto result = std::vector<std::string>{};
+        auto result = std::vector<std::string_view>{};
 
         auto start = std::size_t{0};
         while (start <= s.size())
@@ -52,12 +52,12 @@ namespace common_utils
         return result;
     }
 
-    std::optional<float> str_to_float(const std::string &str)
+    std::optional<float> str_to_float(std::string_view str)
     {
         char *end = nullptr;
 
-        auto result = strtof(str.c_str(), &end);
-        if (end == str.c_str())
+        auto result = strtof(str.data(), &end);
+        if (end == str.data())
         {
             return std::nullopt;
         }
@@ -65,12 +65,12 @@ namespace common_utils
         return result;
     }
 
-    float str_to_float(const std::string &str, float default_value)
+    float str_to_float(std::string_view str, float default_value)
     {
         return str_to_float(str).value_or(default_value);
     }
 
-    std::optional<bool> str_to_bool(const std::string &str)
+    std::optional<bool> str_to_bool(std::string_view str)
     {
         if (str == "true" || str == "1")
         {
@@ -85,12 +85,12 @@ namespace common_utils
         return std::nullopt;
     }
 
-    bool str_to_bool(const std::string &str, bool default_value)
+    bool str_to_bool(std::string_view str, bool default_value)
     {
         return str_to_bool(str).value_or(default_value);
     }
 
-    float str_to_float(const std::optional<std::string> &str, float default_value)
+    float str_to_float(const std::optional<std::string_view> &str, float default_value)
     {
         if (str.has_value())
         {
@@ -107,5 +107,18 @@ namespace common_utils
     float ema(float new_value, float prev_value, float alpha)
     {
         return alpha * new_value + (1.0f - alpha) * prev_value;
+    }
+
+    std::optional<std::string_view> substr_after(
+        std::string_view sv,
+        std::string_view prefix)
+    {
+        if (sv.size() >= prefix.size() &&
+            sv.substr(0, prefix.size()) == prefix)
+        {
+            return sv.substr(prefix.size());
+        }
+
+        return std::nullopt;
     }
 }

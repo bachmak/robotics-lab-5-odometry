@@ -15,17 +15,21 @@ namespace common_utils
     template <class... Ts>
     overloads(Ts...) -> overloads<Ts...>;
 
-    std::string trim(const std::string &str);
-    std::vector<std::string> split(const std::string &s);
+    std::string_view trim(std::string_view s);
+    std::vector<std::string_view> split(std::string_view s);
 
-    std::optional<float> str_to_float(const std::string &str);
-    float str_to_float(const std::string &str, float default_value);
+    std::optional<float> str_to_float(std::string_view str);
+    float str_to_float(std::string_view str, float default_value);
 
-    std::optional<bool> str_to_bool(const std::string &str);
-    bool str_to_bool(const std::string &str, bool default_value);
+    std::optional<bool> str_to_bool(std::string_view str);
+    bool str_to_bool(std::string_view str, bool default_value);
 
     float str_to_float(const std::optional<std::string> &str, float default_value);
     float ema(float new_value, float prev_value, float alpha);
+
+    std::optional<std::string_view> substr_after(
+        std::string_view sv,
+        std::string_view prefix);
 
     template <typename T>
     std::vector<T> remove_first(const std::vector<T> &v, size_t n = 1)
