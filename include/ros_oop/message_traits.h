@@ -4,9 +4,11 @@
 
 #include <std_msgs/msg/int32.h>
 #include <std_msgs/msg/float32.h>
+#include <std_msgs/msg/string.h>
 #include <geometry_msgs/msg/twist.h>
 
 #include <cstdint>
+#include <string>
 
 namespace ros
 {
@@ -97,6 +99,33 @@ namespace ros
                     .z = to_f(msg->angular.z),
                 },
             };
+        }
+    };
+
+    template <>
+    struct MessageTraits<std::string>
+    {
+        using RclMessageType = std_msgs__msg__String;
+
+        static auto get_type_support()
+        {
+            return ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String);
+        }
+
+        static auto to_message(const std::string &str)
+        {
+            return RclMessageType{
+                .data = {
+                    .data = const_cast<char *>(str.data()),
+                    .size = str.size(),
+                    .capacity = str.size() + 1,
+                },
+            };
+        }
+
+        static auto to_original_type(const RclMessageType *msg)
+        {
+            return std::string(msg->data.data, msg->data.size);
         }
     };
 }
