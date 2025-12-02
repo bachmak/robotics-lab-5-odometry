@@ -2,6 +2,8 @@
 
 #include "pwm_utils.h"
 #include "geo_utils.h"
+#include "common_utils.h"
+#include "io_utils.h"
 
 #include <Servo.h>
 
@@ -117,49 +119,57 @@ void Motor::update(Us dt)
     servo_.writeMicroseconds(pwm.count());
 }
 
-void Motor::set(Setting setting, float value)
+void Motor::configure(std::string_view s, float value)
 {
-    const auto pwm = Us{static_cast<int>(value)};
-    switch (setting)
+    if (auto pid_setting = common_utils::substr_after(s, "pid."))
     {
-    case Setting::PID_G:
-    case Setting::PID_T_I:
-    case Setting::PID_T_D:
-    case Setting::PID_OUT_MIN:
-    case Setting::PID_OUT_MAX:
-        return pid_.set(setting, value);
-
-    case Setting::MOTOR_SPEED_FILTER_ALPHA:
-        settings_.speed_filter_alpha = value;
-        return;
-    case Setting::MOTOR_FB_PWM_MIN:
-        settings_.feedback_pwm_min = pwm;
-        return;
-    case Setting::MOTOR_FB_PWM_MAX:
-        settings_.feedback_pwm_max = pwm;
-        return;
-    case Setting::MOTOR_PWM_MIN:
-        settings_.pwm_min = pwm;
-        return;
-    case Setting::MOTOR_PWM_STOP:
-        settings_.pwm_stop = pwm;
-        return;
-    case Setting::MOTOR_PWM_MAX:
-        settings_.pwm_max = pwm;
-        return;
-    case Setting::MOTOR_PWM_DEADBAND_FWD:
-        settings_.pwm_deadband_fwd = pwm;
-        return;
-    case Setting::MOTOR_PWM_DEADBAND_BWD:
-        settings_.pwm_deadband_bwd = pwm;
-        return;
-    case Setting::MOTOR_PWD_GAIN_FWD:
-        settings_.pwm_gain_fwd = value;
-        return;
-    case Setting::MOTOR_PWD_GAIN_BWD:
-        settings_.pwm_gain_bwd = value;
-        return;
+        return pid_.configure(*pid_setting, value);
     }
 
-    return;
+    const auto pwm = Us{static_cast<int>(value)};
+
+    if (s == "speed-filter-alpha")
+    {
+        speed_filter_.set_alpha(value);
+    }
+    else if (s == "fb-pwm-min")
+    {
+        settings_.feedback_pwm_min = pwm;
+    }
+    else if (s == "fb-pwm-max")
+    {
+        settings_.feedback_pwm_max = pwm;
+    }
+    else if (s == "pwm-min")
+    {
+        settings_.pwm_min = pwm;
+    }
+    else if (s == "pwm-max")
+    {
+        settings_.pwm_max = pwm;
+    }
+    else if (s == "pwm-stop")
+    {
+        settings_.pwm_stop = pwm;
+    }
+    else if (s == "pwm-deadband-fwd")
+    {
+        settings_.pwm_deadband_fwd = pwm;
+    }
+    else if (s == "pwm-deadband-bwd")
+    {
+        settings_.pwm_deadband_bwd = pwm;
+    }
+    else if (s == "pwm-gain-fwd")
+    {
+        settings_.pwm_gain_fwd = value;
+    }
+    else if (s == "pwm-gain-bwd")
+    {
+        settings_.pwm_gain_bwd = value;
+    }
+    else
+    {
+        io_utils::error("Motor: unknown settins: %s", s.data());
+    }
 }

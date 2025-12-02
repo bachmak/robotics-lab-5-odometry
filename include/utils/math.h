@@ -16,6 +16,8 @@ namespace utils::math
 
         float last_value() const { return last_value_; }
 
+        void set_alpha(float alpha) { alpha_ = alpha; }
+
     private:
         float alpha_;
         float last_value_;

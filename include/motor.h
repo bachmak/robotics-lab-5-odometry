@@ -7,6 +7,7 @@
 #include <Servo.h>
 
 #include <limits>
+#include <string_view>
 
 struct MotorSettings
 {
@@ -53,7 +54,7 @@ public:
     DegSec get_real_speed() const;
     void update(Us dt);
 
-    void set(Setting setting, float value);
+    void configure(std::string_view setting, float value);
 
 private:
     MotorSettings settings_;
