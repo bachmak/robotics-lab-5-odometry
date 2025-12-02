@@ -27,7 +27,7 @@ namespace ros
             return ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32);
         }
 
-        static auto to_messge(int32_t data)
+        static auto to_message(int32_t data)
         {
             return RclMessageType{.data = data};
         }
@@ -48,7 +48,7 @@ namespace ros
             return ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float32);
         }
 
-        static auto to_messge(float data)
+        static auto to_message(float data)
         {
             return RclMessageType{.data = data};
         }
@@ -62,6 +62,22 @@ namespace ros
         static auto get_type_support()
         {
             return ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Twist);
+        }
+
+        static auto to_message(const geo_utils::Twist &twist)
+        {
+            return RclMessageType{
+                .linear = {
+                    .x = twist.linear.x,
+                    .y = twist.linear.y,
+                    .z = twist.linear.z,
+                },
+                .angular = {
+                    .x = twist.angular.x,
+                    .y = twist.angular.y,
+                    .z = twist.angular.z,
+                },
+            };
         }
 
         static auto to_original_type(const RclMessageType *msg)

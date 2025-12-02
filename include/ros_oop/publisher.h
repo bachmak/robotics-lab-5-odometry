@@ -27,7 +27,7 @@ namespace ros
 
         void publish(const T &data)
         {
-            auto message = Traits::to_messge(data);
+            auto message = Traits::to_message(data);
             rcc_check(rcl_publish(&impl_, &message, nullptr));
         }
 
