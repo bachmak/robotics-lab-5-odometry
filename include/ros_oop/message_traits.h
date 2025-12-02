@@ -1,7 +1,10 @@
 #pragma once
 
+#include "geo_utils.h"
+
 #include <std_msgs/msg/int32.h>
 #include <std_msgs/msg/float32.h>
+#include <geometry_msgs/msg/twist.h>
 
 #include <cstdint>
 
@@ -48,6 +51,36 @@ namespace ros
         static auto to_messge(float data)
         {
             return RclMessageType{.data = data};
+        }
+    };
+
+    template <>
+    struct MessageTraits<geo_utils::Twist>
+    {
+        using RclMessageType = geometry_msgs__msg__Twist;
+
+        static auto get_type_support()
+        {
+            return ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Twist);
+        }
+
+        static auto to_original_type(const RclMessageType *msg)
+        {
+            auto to_f = [](double a)
+            { return static_cast<float>(a); };
+
+            return geo_utils::Twist{
+                .linear = {
+                    .x = to_f(msg->linear.x),
+                    .y = to_f(msg->linear.y),
+                    .z = to_f(msg->linear.z),
+                },
+                .angular = {
+                    .x = to_f(msg->angular.x),
+                    .y = to_f(msg->angular.y),
+                    .z = to_f(msg->angular.z),
+                },
+            };
         }
     };
 }
