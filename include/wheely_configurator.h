@@ -4,8 +4,6 @@
 #include "wheely.h"
 #include "common_utils.h"
 
-class Wheely;
-
 class WheelyConfigurator
 {
 public:
@@ -17,6 +15,8 @@ public:
                         { configure(str); })
     {
     }
+
+    auto &subscription() { return subscription_; }
 
 private:
     void configure(const std::string &str)

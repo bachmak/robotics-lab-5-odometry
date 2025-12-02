@@ -9,6 +9,7 @@
 #include "io_utils.h"
 #include "time_utils.h"
 #include "wheely.h"
+#include "wheely_configurator.h"
 #include "utils/connection.h"
 
 namespace lab_6
@@ -40,8 +41,9 @@ namespace lab_6
         };
 
         const char *node_name = "wheely";
-        const char *cmd_vel_topic = "cmd_vel";
-        const char *cmd_vel_echo_topic = "cmd_vel_echo";
+        const char *cmd_vel_topic = "cmd-vel";
+        const char *cmd_vel_echo_topic = "cmd-vel-echo";
+        const char *config_topic = "wheely-config";
 
         Ms ping_interval{500};
         Ms ping_timeout{100};
@@ -69,6 +71,7 @@ namespace lab_6
         };
 
         auto wheely = Wheely{config.wheely_settings};
+        auto wheely_configurator = WheelyConfigurator{wheely, node, config.config_topic};
 
         auto subscription_callback = [&](const geo_utils::Twist &twist)
         {
@@ -83,6 +86,7 @@ namespace lab_6
 
         auto executables = std::vector<ros::Executable>{
             &subscription.base(),
+            &wheely_configurator.subscription().base(),
         };
 
         auto executor = ros::Executor{support, executables};
