@@ -41,10 +41,10 @@ namespace lab_6
         };
 
         const char *node_name = "wheely";
-        const char *cmd_vel_topic = "cmd-vel";
-        const char *cmd_vel_echo_topic = "cmd-vel-echo";
+        const char *cmd_vel_topic = "cmd_vel";
+        const char *cmd_vel_echo_topic = "cmd_vel_echo";
         const char *logs_topic = "logs";
-        const char *config_topic = "wheely-config";
+        const char *config_topic = "wheely_config";
 
         Ms ping_interval{500};
         Ms ping_timeout{100};
