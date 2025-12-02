@@ -21,7 +21,7 @@ namespace io_utils
     {
         LogLevel s_log_level = LogLevel::INFO;
 
-        ros::Publisher<std::string> *s_log_publisher = nulllptr;
+        ros::Publisher<std::string> *s_log_publisher = nullptr;
 
         const char *to_string(LogLevel log_level)
         {
