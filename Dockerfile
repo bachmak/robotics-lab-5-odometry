@@ -60,7 +60,11 @@ RUN rosdep update
 RUN pip3 install --no-cache-dir platformio
 
 # ---- additional dependencies for a better workflow ----
-RUN apt update && apt install -y python3-venv gh
+RUN apt update && apt install -y \
+    python3-venv \
+    gh \
+    gcc-arm-none-eabi \
+    binutils-arm-none-eabi
 
 # ---- Micro-ROS setup ----
 RUN git clone -b iron https://github.com/micro-ROS/micro_ros_setup.git /opt/micro_ros_setup
