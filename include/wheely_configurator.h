@@ -21,6 +21,11 @@ public:
 private:
     void configure(std::string_view str)
     {
+        io_utils::debug(
+            "WheelyConfiguration: received message: %.*s",
+            static_cast<int>(str.size()),
+            str.data());
+
         const auto tokens = common_utils::split(str);
         if (tokens.size() != 2)
         {
@@ -33,6 +38,12 @@ private:
         {
             return;
         }
+
+        io_utils::info(
+            "WheelyConfiguration: applying setting: %.*s = %f",
+            static_cast<int>(setting.size()),
+            setting.data(),
+            *value);
 
         wheely_.configure(setting, *value);
     }
