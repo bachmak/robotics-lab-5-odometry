@@ -139,7 +139,7 @@ void Motor::update(Us dt)
     }
     else
     {
-    servo_.writeMicroseconds(pwm.count());
+        servo_.writeMicroseconds(pwm.count());
     }
 }
 

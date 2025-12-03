@@ -88,15 +88,57 @@ namespace lab_6
         auto echo_publisher = ros::Publisher<std::string_view>{node, config.echo_pub_topic};
 
         auto wheely = Wheely{config.wheely_settings};
-        auto wheely_configurator = WheelyConfigurator{wheely, node, config.config_topic};
+        auto main_loop_delay = Ms{0};
+
+        auto cfg_sub = ros::Subscription<std::string_view>{
+            node,
+            config.config_topic,
+            [&](std::string_view str)
+            {
+                io_utils::debug(
+                    "WheelyConfiguration: received message: %.*s",
+                    static_cast<int>(str.size()),
+                    str.data());
+
+                const auto tokens = common_utils::split(str);
+                if (tokens.size() != 2)
+                {
+                    return;
+                }
+
+                const auto setting = tokens[0];
+                const auto value = common_utils::str_to_float(tokens[1]);
+                if (!value.has_value())
+                {
+                    return;
+                }
+
+                if (auto subsetting = common_utils::substr_after(setting, "wheely."))
+                {
+                    wheely.configure(*subsetting, *value);
+                }
+                else if (setting == "delay")
+                {
+                    main_loop_delay = Ms{static_cast<int>(*value)};
+                }
+
+                io_utils::info(
+                    "WheelyConfiguration: applying setting: %.*s = %f",
+                    static_cast<int>(setting.size()),
+                    setting.data(),
+                    *value);
+
+                wheely.configure(setting, *value);
+            },
+        };
 
         auto cmd_vel_sub = ros::Subscription<geo_utils::Twist>{
             node,
             config.cmd_vel_topic,
             [&](const geo_utils::Twist &twist)
-        {
-            cmd_vel_echo_publisher.publish(twist);
-            wheely.set_target_speed(twist);
+            {
+                cmd_vel_echo_publisher.publish(twist);
+                wheely.set_target_speed(twist);
             }};
 
         auto cmd_action_sub = ros::Subscription<std::string_view>{
@@ -105,7 +147,7 @@ namespace lab_6
             [&wheely](std::string_view cmd)
             {
                 if (cmd == "stop")
-        {
+                {
                     wheely.set_stop(true);
                 }
                 else if (cmd == "go")
@@ -125,7 +167,7 @@ namespace lab_6
         auto executables = std::vector<ros::Executable>{
             &cmd_vel_sub.base(),
             &cmd_action_sub.base(),
-            &wheely_configurator.subscription().base(),
+            &cfg_sub.base(),
             &echo_sub.base(),
         };
 
@@ -150,6 +192,8 @@ namespace lab_6
 
             executor.spin_some(config.spin_timeout);
             wheely.update(dt);
+
+            delay(main_loop_delay.count());
         }
 
         io_utils::redirect_reset();
