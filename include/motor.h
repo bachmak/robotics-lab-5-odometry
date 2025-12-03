@@ -17,6 +17,7 @@ struct MotorSettings
         .T_d = 0,
         .out_min = std::numeric_limits<float>::min(),
         .out_max = std::numeric_limits<float>::max(),
+        .deadband = 0.001,
     };
 
     float speed_filter_alpha = 0.1f;

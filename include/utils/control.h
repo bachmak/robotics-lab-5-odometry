@@ -14,6 +14,7 @@ namespace utils::control
         float T_d;
         float out_min;
         float out_max;
+        float deadband;
     };
 
     struct PIDParams

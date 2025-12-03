@@ -50,6 +50,11 @@ namespace utils::control
             integrator_ += error * dt;
         }
 
+        if (std::abs(output) < settings_.deadband)
+        {
+            return 0.0f;
+        }
+
         return std::clamp(output, settings_.out_min, settings_.out_max);
     }
 
@@ -74,6 +79,10 @@ namespace utils::control
         else if (setting == "out-max")
         {
             settings_.out_max = value;
+        }
+        else if (setting == "deadband")
+        {
+            settings_.deadband = value;
         }
         else
         {

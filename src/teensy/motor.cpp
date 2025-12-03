@@ -69,6 +69,10 @@ namespace
     {
         const auto [zero_point, gain] = [&]() -> std::pair<Us, float>
         {
+            if (control == 0.0f)
+            {
+                return {settings.pwm_stop, 0.0f};
+            }
             if (control > 0.0f)
             {
                 return {
