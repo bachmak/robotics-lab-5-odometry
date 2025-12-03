@@ -22,7 +22,7 @@ namespace
         const auto v_r = v + settings.width.v / 2 * w;
 
         const auto w_l = v_l / settings.left.radius.v;
-        const auto w_r = v_r / settings.right.radius.v;
+        const auto w_r = -v_r / settings.right.radius.v;
 
         const auto w_l_deg = DegSec{w_l * 180 / M_PI};
         const auto w_r_deg = DegSec{w_r * 180 / M_PI};
