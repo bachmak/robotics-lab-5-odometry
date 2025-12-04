@@ -113,13 +113,13 @@ namespace lab_6
                     return;
                 }
 
-                if (auto subsetting = common_utils::substr_after(setting, "wheely."))
-                {
-                    wheely.configure(*subsetting, *value);
-                }
-                else if (setting == "delay")
+                if (setting == "delay")
                 {
                     main_loop_delay = Ms{static_cast<int>(*value)};
+                }
+                else
+                {
+                    wheely.configure(setting, *value);
                 }
 
                 io_utils::info(
