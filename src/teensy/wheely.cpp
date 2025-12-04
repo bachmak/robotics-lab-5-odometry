@@ -96,6 +96,12 @@ void Wheely::configure(std::string_view setting, float value)
     {
         settings_.width = Meter{value};
     }
+    else if (setting == "speed")
+    {
+        auto speed = DegSec{value};
+        left_.set_target_speed(speed);
+        right_.set_target_speed(-speed);
+    }
     else
     {
         io_utils::error("Wheely: unknown setting: %s", setting.data());
