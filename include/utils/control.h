@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common.h"
-#include "settings.h"
 
 #include <string_view>
 
